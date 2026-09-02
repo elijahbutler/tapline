@@ -2,7 +2,7 @@
 
 This roadmap orders work by proof, not feature count. Each phase must leave captured data safer than the phase before it. Direct BLE support waits until the Apple Watch, queue, and delivery contracts work end to end.
 
-Current status: phase 1 code and package tests are complete. Physical iPhone validation, local-network permission checks, and release work remain open.
+Current status: phase 2 code and package tests are complete. Physical iPhone and Apple Watch validation, local-network permission checks, WatchConnectivity, and release work remain open.
 
 ## Phase 0: settle the public contract and test the risky APIs
 
@@ -101,6 +101,8 @@ Out of scope:
 ## Phase 2: add deliberate Apple Watch capture
 
 Goal: create button and short-audio events on Apple Watch and retain them locally.
+
+Status: implemented in code. The package acceptance tests cover stable IDs, durable button and audio records, relaunch recovery, and permission failures without empty audio. Physical-watch acceptance tests remain open, especially wrist-down recording, interruption recovery, and microphone behavior on supported hardware.
 
 Work:
 
