@@ -70,6 +70,39 @@ final class WatchCaptureOutboxTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: capture.fileURL.path))
     }
 
+    func testCommittedAudioSurvivesTransientPromotionFailure() async throws {
+        let eventID = UUID()
+        let fileManager = FailOnceActiveMoveFileManager()
+        let outbox = WatchCaptureOutbox(
+            rootDirectory: temporaryDirectory,
+            fileManager: fileManager
+        )
+        let capture = try await outbox.beginAudioCapture(id: eventID)
+        try Data("audio".utf8).write(to: capture.fileURL)
+
+        let event = try await outbox.commitAudioCapture(
+            capture,
+            source: source,
+            durationMilliseconds: 100,
+            sampleRateHertz: 16_000,
+            channelCount: 1
+        )
+
+        let active = temporaryDirectory.appending(
+            path: "active/\(eventID.uuidString.lowercased())",
+            directoryHint: .isDirectory
+        )
+        XCTAssertTrue(FileManager.default.fileExists(atPath: active.appending(path: "event.json").path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: active.appending(path: "audio.m4a").path))
+
+        let relaunched = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        let snapshot = try await relaunched.snapshot()
+
+        XCTAssertEqual(snapshot.items.map(\.event), [event])
+        XCTAssertTrue(snapshot.failures.isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: active.path))
+    }
+
     func testDeniedPermissionPersistsFailureWithoutAudioFile() async throws {
         let eventID = UUID()
         let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
@@ -304,6 +337,19 @@ private final class FailOnceStagingMoveFileManager: FileManager, @unchecked Send
            sourceURL.deletingLastPathComponent().lastPathComponent == "staging" {
             shouldFailStagingMove = false
             throw NSError(domain: Self.errorDomain, code: 1)
+        }
+        try super.moveItem(at: sourceURL, to: destinationURL)
+    }
+}
+
+private final class FailOnceActiveMoveFileManager: FileManager, @unchecked Sendable {
+    private var shouldFailActiveMove = true
+
+    override func moveItem(at sourceURL: URL, to destinationURL: URL) throws {
+        if shouldFailActiveMove,
+           sourceURL.deletingLastPathComponent().lastPathComponent == "active" {
+            shouldFailActiveMove = false
+            throw NSError(domain: "WatchCaptureOutboxTests.TransientActiveMove", code: 1)
         }
         try super.moveItem(at: sourceURL, to: destinationURL)
     }

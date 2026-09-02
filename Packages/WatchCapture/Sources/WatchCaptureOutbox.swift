@@ -126,9 +126,9 @@ public actor WatchCaptureOutbox {
         )
 
         try writeEvent(event, to: directory)
-        try fileManager.removeItem(at: directory.appending(path: draftFilename))
-        try applyDataProtection(to: audioURL)
-        try moveCommittedDirectory(directory, eventID: event.id)
+        try? fileManager.removeItem(at: directory.appending(path: draftFilename))
+        try? applyDataProtection(to: audioURL)
+        try? moveCommittedDirectory(directory, eventID: event.id)
         return event
     }
 
