@@ -96,8 +96,109 @@ final class WatchCaptureOutboxTests: XCTestCase {
         let relaunched = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
         let snapshot = try await relaunched.snapshot()
 
-        XCTAssertEqual(snapshot.activeAudioCaptures, [capture])
+        let recovered = try XCTUnwrap(snapshot.activeAudioCaptures.first)
+        XCTAssertEqual(recovered.id, capture.id)
+        XCTAssertEqual(recovered.mediaID, capture.mediaID)
+        XCTAssertEqual(canonicalURL(recovered.fileURL), canonicalURL(capture.fileURL))
+        XCTAssertEqual(
+            recovered.occurredAt.timeIntervalSince1970,
+            capture.occurredAt.timeIntervalSince1970,
+            accuracy: 0.001
+        )
         XCTAssertEqual(try Data(contentsOf: capture.fileURL), Data("partial-audio".utf8))
+    }
+
+    func testDefaultOccurredAtCaptureCanCommit() async throws {
+        let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        let capture = try await outbox.beginAudioCapture()
+        try Data("audio".utf8).write(to: capture.fileURL)
+
+        let event = try await outbox.commitAudioCapture(
+            capture,
+            source: source,
+            durationMilliseconds: 100,
+            sampleRateHertz: 16_000,
+            channelCount: 1
+        )
+
+        XCTAssertEqual(event.id, capture.id)
+        XCTAssertEqual(
+            event.occurredAt.timeIntervalSince1970,
+            capture.occurredAt.timeIntervalSince1970,
+            accuracy: 0.001
+        )
+    }
+
+    func testActiveCaptureUsesCurrentRootAfterContainerMove() async throws {
+        let originalRoot = temporaryDirectory.appending(path: "original", directoryHint: .isDirectory)
+        let movedRoot = temporaryDirectory.appending(path: "moved", directoryHint: .isDirectory)
+        let first = WatchCaptureOutbox(rootDirectory: originalRoot)
+        let capture = try await first.beginAudioCapture()
+        try Data("audio".utf8).write(to: capture.fileURL)
+        try FileManager.default.moveItem(at: originalRoot, to: movedRoot)
+
+        let relaunched = WatchCaptureOutbox(rootDirectory: movedRoot)
+        let snapshot = try await relaunched.snapshot()
+        let recovered = try XCTUnwrap(snapshot.activeAudioCaptures.first)
+        let expectedAudioURL = movedRoot.appending(
+            path: "active/\(capture.id.uuidString.lowercased())/audio.m4a"
+        )
+        XCTAssertEqual(canonicalURL(recovered.fileURL), canonicalURL(expectedAudioURL))
+
+        let event = try await relaunched.commitAudioCapture(
+            recovered,
+            source: source,
+            durationMilliseconds: 100,
+            sampleRateHertz: 16_000,
+            channelCount: 1
+        )
+        XCTAssertEqual(event.id, capture.id)
+    }
+
+    func testCommittedButtonEventRecoversFromStaging() async throws {
+        let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        _ = try await outbox.snapshot()
+        let event = CaptureEvent(
+            id: UUID(),
+            type: .buttonPressed,
+            occurredAt: .now,
+            capturedAt: .now,
+            source: source,
+            payload: ["button": .string("primary"), "gesture": .string("press")]
+        )
+        let staging = temporaryDirectory.appending(
+            path: "staging/\(event.id.uuidString.lowercased())",
+            directoryHint: .isDirectory
+        )
+        try FileManager.default.createDirectory(at: staging, withIntermediateDirectories: true)
+        try EventCodec.encode(event).write(to: staging.appending(path: "event.json"), options: .atomic)
+
+        let relaunched = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        let snapshot = try await relaunched.snapshot()
+
+        XCTAssertEqual(snapshot.items.map(\.event), [event])
+        XCTAssertFalse(FileManager.default.fileExists(atPath: staging.path))
+    }
+
+    func testCorruptPendingCaptureIsQuarantinedWithoutBlockingValidEvents() async throws {
+        let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        let valid = try await outbox.commitButtonEvent(source: source)
+        let corruptID = UUID()
+        let corruptDirectory = temporaryDirectory.appending(
+            path: "pending/\(corruptID.uuidString.lowercased())",
+            directoryHint: .isDirectory
+        )
+        try FileManager.default.createDirectory(at: corruptDirectory, withIntermediateDirectories: true)
+        try Data("not-json".utf8).write(to: corruptDirectory.appending(path: "event.json"))
+
+        let snapshot = try await outbox.snapshot()
+        XCTAssertEqual(snapshot.items.map(\.event), [valid])
+        XCTAssertEqual(snapshot.failures.first { $0.id == corruptID }?.code, .outboxRecoveryFailed)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: corruptDirectory.path))
+
+        let next = try await outbox.commitButtonEvent(source: source)
+        let refreshed = try await outbox.snapshot()
+        XCTAssertEqual(refreshed.items.map(\.id).sorted(), [valid.id, next.id].sorted())
     }
 
     func testEmptyAudioCannotBecomeCapturedEvent() async throws {
@@ -133,5 +234,9 @@ final class WatchCaptureOutboxTests: XCTestCase {
     private func findAudioFiles(in directory: URL) -> [URL] {
         let enumerator = FileManager.default.enumerator(at: directory, includingPropertiesForKeys: nil)
         return enumerator?.compactMap { $0 as? URL }.filter { $0.pathExtension == "m4a" } ?? []
+    }
+
+    private func canonicalURL(_ url: URL) -> URL {
+        url.standardizedFileURL.resolvingSymlinksInPath()
     }
 }

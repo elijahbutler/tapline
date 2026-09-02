@@ -308,11 +308,13 @@ final class WatchCaptureModel: NSObject, ObservableObject {
         guard interruptionTask == nil, routeChangeTask == nil else { return }
 
         interruptionTask = Task { @MainActor [weak self] in
-            for await notification in NotificationCenter.default.notifications(
-                named: AVAudioSession.interruptionNotification
-            ) {
-                guard let rawValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
-                      AVAudioSession.InterruptionType(rawValue: rawValue) == .began,
+            let interruptionTypes = NotificationCenter.default
+                .notifications(named: AVAudioSession.interruptionNotification)
+                .compactMap { notification in
+                    notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+                }
+            for await rawValue in interruptionTypes {
+                guard AVAudioSession.InterruptionType(rawValue: rawValue) == .began,
                       self?.isRecording == true
                 else { continue }
                 await self?.finishRecording(
@@ -323,11 +325,13 @@ final class WatchCaptureModel: NSObject, ObservableObject {
         }
 
         routeChangeTask = Task { @MainActor [weak self] in
-            for await notification in NotificationCenter.default.notifications(
-                named: AVAudioSession.routeChangeNotification
-            ) {
-                guard let rawValue = notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt,
-                      let reason = AVAudioSession.RouteChangeReason(rawValue: rawValue),
+            let routeChangeReasons = NotificationCenter.default
+                .notifications(named: AVAudioSession.routeChangeNotification)
+                .compactMap { notification in
+                    notification.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt
+                }
+            for await rawValue in routeChangeReasons {
+                guard let reason = AVAudioSession.RouteChangeReason(rawValue: rawValue),
                       reason != .categoryChange,
                       self?.isRecording == true
                 else { continue }

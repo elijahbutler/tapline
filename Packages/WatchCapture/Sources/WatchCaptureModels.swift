@@ -1,7 +1,7 @@
 import CaptureCore
 import Foundation
 
-public struct ActiveAudioCapture: Codable, Equatable, Sendable, Identifiable {
+public struct ActiveAudioCapture: Equatable, Sendable, Identifiable {
     public let id: UUID
     public let mediaID: UUID
     public let occurredAt: Date
@@ -21,6 +21,7 @@ public enum WatchCaptureFailureCode: String, Codable, Equatable, Sendable {
     case recordingInterrupted = "recording_interrupted"
     case invalidRecording = "invalid_recording"
     case storageUnavailable = "storage_unavailable"
+    case outboxRecoveryFailed = "outbox_recovery_failed"
 }
 
 public struct WatchCaptureFailure: Codable, Equatable, Sendable, Identifiable {

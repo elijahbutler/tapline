@@ -20,10 +20,12 @@ private struct CaptureProvider: TimelineProvider {
 }
 
 private struct CaptureWidgetView: View {
+    private static let captureURL = URL(string: "tapline://capture")
+
     @Environment(\.widgetFamily) private var family
 
     var body: some View {
-        Link(destination: URL(string: "tapline://capture")!) {
+        Group {
             switch family {
             case .accessoryInline:
                 Label("Tapline capture", systemImage: "waveform")
@@ -44,6 +46,7 @@ private struct CaptureWidgetView: View {
                     .accessibilityLabel("Open Tapline capture")
             }
         }
+        .widgetURL(Self.captureURL)
         .containerBackground(.fill.tertiary, for: .widget)
     }
 }

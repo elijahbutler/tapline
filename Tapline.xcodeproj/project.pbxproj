@@ -81,7 +81,7 @@
 		1FA56737FA573F6268DE87DF /* CaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureView.swift; sourceTree = "<group>"; };
 		2056003331522A33E1E12C59 /* DestinationDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDraft.swift; sourceTree = "<group>"; };
 		2BF758041D81EBBC344E40D3 /* TaplineWatchWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TaplineWatchWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		301AFC48C2A8C6DD6DBB08E0 /* t3code-3d8ae599 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "t3code-3d8ae599"; path = .; sourceTree = SOURCE_ROOT; };
+		301AFC48C2A8C6DD6DBB08E0 /* tapline */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "tapline"; path = .; sourceTree = SOURCE_ROOT; };
 		64C856541B0F4BE01DF53E91 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		6FE01CA565762C987E2507AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		788070161B931ECF24EF31F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -192,7 +192,7 @@
 		DB164C4B53C869A4D027BC0F /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				301AFC48C2A8C6DD6DBB08E0 /* t3code-3d8ae599 */,
+				301AFC48C2A8C6DD6DBB08E0 /* tapline */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -388,7 +388,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.watchapp.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.ios.watchapp.widget;
 				PRODUCT_NAME = TaplineWatchWidget;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -421,7 +421,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Apps/TaplineWatch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.watchapp;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.ios.watchapp;
 				PRODUCT_NAME = Tapline;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -560,7 +560,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Apps/TaplineWatch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.watchapp;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.ios.watchapp;
 				PRODUCT_NAME = Tapline;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -598,7 +598,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.watchapp.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.ios.watchapp.widget;
 				PRODUCT_NAME = TaplineWatchWidget;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;

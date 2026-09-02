@@ -7,6 +7,7 @@ options:
     watchOS: "11.0"
   generateEmptyDirectories: true
   groupSortPosition: top
+  postGenCommand: sh Scripts/normalize-xcode-project.sh
 
 settings:
   base:
@@ -61,11 +62,16 @@ targets:
       path: Apps/TaplineWatch/Info.plist
       properties:
         CFBundleDisplayName: Tapline
+        CFBundleURLTypes:
+          - CFBundleURLName: app.tapline.ios.watchapp.capture
+            CFBundleURLSchemes:
+              - tapline
         NSMicrophoneUsageDescription: Tapline records only when you press the visible record button.
+        WKApplication: true
         WKCompanionAppBundleIdentifier: app.tapline.ios
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: app.tapline.watchapp
+        PRODUCT_BUNDLE_IDENTIFIER: app.tapline.ios.watchapp
         PRODUCT_NAME: Tapline
         GENERATE_INFOPLIST_FILE: false
         TARGETED_DEVICE_FAMILY: "4"
@@ -90,7 +96,7 @@ targets:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: app.tapline.watchapp.widget
+        PRODUCT_BUNDLE_IDENTIFIER: app.tapline.ios.watchapp.widget
         PRODUCT_NAME: TaplineWatchWidget
         GENERATE_INFOPLIST_FILE: false
         SKIP_INSTALL: true

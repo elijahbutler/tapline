@@ -2,6 +2,12 @@ import CaptureCore
 import CryptoKit
 import Foundation
 
+private struct PersistedAudioCapture: Codable {
+    let id: UUID
+    let mediaID: UUID
+    let occurredAt: Date
+}
+
 public actor WatchCaptureOutbox {
     public static let audioFilename = "audio.m4a"
 
@@ -47,7 +53,10 @@ public actor WatchCaptureOutbox {
             occurredAt: occurredAt,
             fileURL: directory.appending(path: Self.audioFilename)
         )
-        try writeJSON(capture, to: directory.appending(path: draftFilename))
+        try writeJSON(
+            PersistedAudioCapture(id: capture.id, mediaID: capture.mediaID, occurredAt: capture.occurredAt),
+            to: directory.appending(path: draftFilename)
+        )
         return capture
     }
 
@@ -66,21 +75,22 @@ public actor WatchCaptureOutbox {
         try recoverCompletedCaptures()
 
         let directory = activeDirectory.appending(path: capture.id.uuidString.lowercased(), directoryHint: .isDirectory)
-        let storedDraft: ActiveAudioCapture = try readJSON(from: directory.appending(path: draftFilename))
-        guard storedDraft == capture else {
+        let storedDraft: PersistedAudioCapture = try readJSON(from: directory.appending(path: draftFilename))
+        guard storedDraft.id == capture.id, storedDraft.mediaID == capture.mediaID else {
             throw WatchCaptureOutboxError.captureNotActive(capture.id)
         }
-        guard fileManager.fileExists(atPath: capture.fileURL.path) else {
+        let audioURL = directory.appending(path: Self.audioFilename)
+        guard fileManager.fileExists(atPath: audioURL.path) else {
             throw WatchCaptureOutboxError.mediaFileMissing
         }
 
-        let attributes = try fileManager.attributesOfItem(atPath: capture.fileURL.path)
+        let attributes = try fileManager.attributesOfItem(atPath: audioURL.path)
         let byteCount = (attributes[.size] as? NSNumber)?.int64Value ?? 0
         guard byteCount > 0 else {
             throw WatchCaptureOutboxError.emptyAudioFile
         }
 
-        let digest = SHA256.hash(data: try Data(contentsOf: capture.fileURL))
+        let digest = SHA256.hash(data: try Data(contentsOf: audioURL))
             .map { String(format: "%02x", $0) }
             .joined()
 
@@ -97,7 +107,7 @@ public actor WatchCaptureOutbox {
         let event = CaptureEvent(
             id: capture.id,
             type: .audioCaptured,
-            occurredAt: capture.occurredAt,
+            occurredAt: storedDraft.occurredAt,
             capturedAt: capturedAt,
             source: source,
             payload: payload,
@@ -117,7 +127,7 @@ public actor WatchCaptureOutbox {
 
         try writeEvent(event, to: directory)
         try fileManager.removeItem(at: directory.appending(path: draftFilename))
-        try applyDataProtection(to: capture.fileURL)
+        try applyDataProtection(to: audioURL)
         try moveCommittedDirectory(directory, eventID: event.id)
         return event
     }
@@ -196,24 +206,67 @@ public actor WatchCaptureOutbox {
         try prepareDirectories()
         try recoverCompletedCaptures()
 
-        let items = try directories(in: pendingDirectory).map { directory in
-            let event = try EventCodec.decode(Data(contentsOf: directory.appending(path: eventFilename)))
-            let mediaURL = event.media.isEmpty ? nil : directory.appending(path: Self.audioFilename)
-            return WatchOutboxItem(event: event, directoryURL: directory, mediaFileURL: mediaURL)
+        var recoveryFailures: [WatchCaptureFailure] = []
+        var items: [WatchOutboxItem] = []
+        for directory in try directories(in: pendingDirectory) {
+            do {
+                let event = try EventCodec.decode(Data(contentsOf: directory.appending(path: eventFilename)))
+                guard directory.lastPathComponent == event.id.uuidString.lowercased() else {
+                    throw WatchCaptureOutboxError.captureNotActive(event.id)
+                }
+                let mediaURL = event.media.isEmpty ? nil : directory.appending(path: Self.audioFilename)
+                if let mediaURL, !fileManager.fileExists(atPath: mediaURL.path) {
+                    throw WatchCaptureOutboxError.mediaFileMissing
+                }
+                items.append(WatchOutboxItem(event: event, directoryURL: directory, mediaFileURL: mediaURL))
+            } catch {
+                recoveryFailures.append(
+                    quarantine(directory, message: "A saved capture was unreadable and moved aside.")
+                )
+            }
         }
-        .sorted { $0.event.capturedAt > $1.event.capturedAt }
+        items.sort { $0.event.capturedAt > $1.event.capturedAt }
 
-        let failures = try files(in: failuresDirectory, extension: "json").map {
-            try readJSON(WatchCaptureFailure.self, from: $0)
-        }
-        .sorted { $0.recordedAt > $1.recordedAt }
-
-        let activeCaptures: [ActiveAudioCapture] = try directories(in: activeDirectory).compactMap { directory in
+        var activeCaptures: [ActiveAudioCapture] = []
+        for directory in try directories(in: activeDirectory) {
             let draftURL = directory.appending(path: draftFilename)
-            guard fileManager.fileExists(atPath: draftURL.path) else { return nil }
-            return try readJSON(ActiveAudioCapture.self, from: draftURL)
+            guard fileManager.fileExists(atPath: draftURL.path) else { continue }
+            do {
+                let draft = try readJSON(PersistedAudioCapture.self, from: draftURL)
+                guard directory.lastPathComponent == draft.id.uuidString.lowercased() else {
+                    throw WatchCaptureOutboxError.captureNotActive(draft.id)
+                }
+                activeCaptures.append(
+                    ActiveAudioCapture(
+                        id: draft.id,
+                        mediaID: draft.mediaID,
+                        occurredAt: draft.occurredAt,
+                        fileURL: directory.appending(path: Self.audioFilename)
+                    )
+                )
+            } catch {
+                recoveryFailures.append(
+                    quarantine(directory, message: "An unfinished capture was unreadable and moved aside.")
+                )
+            }
         }
-        .sorted { $0.occurredAt > $1.occurredAt }
+        activeCaptures.sort { $0.occurredAt > $1.occurredAt }
+
+        var failures = recoveryFailures
+        for file in try files(in: failuresDirectory, extension: "json") {
+            do {
+                failures.append(try readJSON(WatchCaptureFailure.self, from: file))
+            } catch {
+                failures.append(
+                    quarantine(file, message: "A saved failure record was unreadable and moved aside.")
+                )
+            }
+        }
+        let failuresByID = Dictionary(grouping: failures, by: \.id)
+        failures = failuresByID.values.compactMap { records in
+            records.max { $0.recordedAt < $1.recordedAt }
+        }
+            .sorted { $0.recordedAt > $1.recordedAt }
 
         return WatchOutboxSnapshot(items: items, failures: failures, activeAudioCaptures: activeCaptures)
     }
@@ -230,6 +283,10 @@ public actor WatchCaptureOutbox {
         rootDirectory.appending(path: "pending", directoryHint: .isDirectory)
     }
 
+    private var quarantineDirectory: URL {
+        rootDirectory.appending(path: "quarantine", directoryHint: .isDirectory)
+    }
+
     private var stagingDirectory: URL {
         rootDirectory.appending(path: "staging", directoryHint: .isDirectory)
     }
@@ -238,7 +295,14 @@ public actor WatchCaptureOutbox {
     private let eventFilename = "event.json"
 
     private func prepareDirectories() throws {
-        for directory in [rootDirectory, activeDirectory, pendingDirectory, stagingDirectory, failuresDirectory] {
+        for directory in [
+            rootDirectory,
+            activeDirectory,
+            pendingDirectory,
+            stagingDirectory,
+            failuresDirectory,
+            quarantineDirectory,
+        ] {
             try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
             try applyDataProtection(to: directory)
         }
@@ -247,14 +311,46 @@ public actor WatchCaptureOutbox {
     private func recoverCompletedCaptures() throws {
         for directory in try directories(in: activeDirectory) {
             let eventURL = directory.appending(path: eventFilename)
-            guard fileManager.fileExists(atPath: eventURL.path) else { continue }
-            let event = try EventCodec.decode(Data(contentsOf: eventURL))
+            if fileManager.fileExists(atPath: eventURL.path) {
+                recoverCommittedDirectory(directory, removingDraft: true)
+            } else if !fileManager.fileExists(atPath: directory.appending(path: draftFilename).path) {
+                quarantine(directory, message: "An incomplete capture was moved aside.")
+            }
+        }
+
+        for directory in try directories(in: stagingDirectory) {
+            recoverCommittedDirectory(directory, removingDraft: false)
+        }
+    }
+
+    private func recoverCommittedDirectory(_ directory: URL, removingDraft: Bool) {
+        do {
+            let event = try EventCodec.decode(Data(contentsOf: directory.appending(path: eventFilename)))
             let draftURL = directory.appending(path: draftFilename)
-            if fileManager.fileExists(atPath: draftURL.path) {
+            if removingDraft, fileManager.fileExists(atPath: draftURL.path) {
                 try fileManager.removeItem(at: draftURL)
             }
             try moveCommittedDirectory(directory, eventID: event.id)
+        } catch {
+            quarantine(directory, message: "A capture could not be recovered and was moved aside.")
         }
+    }
+
+    @discardableResult
+    private func quarantine(_ item: URL, message: String) -> WatchCaptureFailure {
+        let eventID = UUID(uuidString: item.deletingPathExtension().lastPathComponent) ?? UUID()
+        let destination = quarantineDirectory.appending(
+            path: "\(item.lastPathComponent)-\(UUID().uuidString.lowercased())"
+        )
+        try? fileManager.moveItem(at: item, to: destination)
+        let failure = WatchCaptureFailure(
+            id: eventID,
+            occurredAt: .now,
+            code: .outboxRecoveryFailed,
+            message: message
+        )
+        try? writeJSON(failure, to: failureURL(for: eventID))
+        return failure
     }
 
     private func moveCommittedDirectory(_ source: URL, eventID: UUID) throws {
