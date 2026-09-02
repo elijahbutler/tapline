@@ -14,6 +14,7 @@ let package = Package(
         .library(name: "CaptureStore", targets: ["CaptureStore"]),
         .library(name: "DeliveryKit", targets: ["DeliveryKit"]),
         .library(name: "EndpointSecurity", targets: ["EndpointSecurity"]),
+        .library(name: "WatchCapture", targets: ["WatchCapture"]),
     ],
     dependencies: [
         .package(
@@ -44,6 +45,11 @@ let package = Package(
             ],
             path: "Packages/CaptureStore/Sources"
         ),
+        .target(
+            name: "WatchCapture",
+            dependencies: ["CaptureCore"],
+            path: "Packages/WatchCapture/Sources"
+        ),
         .testTarget(
             name: "CaptureCoreTests",
             dependencies: ["CaptureCore"],
@@ -64,6 +70,10 @@ let package = Package(
             dependencies: ["CaptureStore", "CaptureCore", "DeliveryKit"],
             path: "Packages/CaptureStore/Tests"
         ),
+        .testTarget(
+            name: "WatchCaptureTests",
+            dependencies: ["WatchCapture", "CaptureCore"],
+            path: "Packages/WatchCapture/Tests"
+        ),
     ]
 )
-

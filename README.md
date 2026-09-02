@@ -4,7 +4,7 @@ Tapline is a proposed local-first capture system for Apple Watch, iPhone, and op
 
 The first release will support an Apple Watch capture app, an iPhone queue and gateway, and configurable HTTP destinations. Home Assistant, n8n, Ollama, self-hosted transcription, and MCP integrations can sit behind those destinations without making any one service mandatory.
 
-This repository contains the product design and the phase 1 iPhone implementation. Apple Watch capture and WatchConnectivity arrive in later phases.
+This repository contains the product design, the phase 1 iPhone implementation, and the phase 2 Apple Watch capture app. WatchConnectivity arrives in phase 3.
 
 ## What Tapline is for
 
@@ -78,12 +78,11 @@ Tapline.xcworkspace
 Apps/
   TaplineiOS/
   TaplineWatch/
-Extensions/
   TaplineWatchWidget/
 Packages/
   CaptureCore/
   CaptureStore/
-  AudioCapture/
+  WatchCapture/
   WatchBridge/
   DeliveryKit/
   EndpointSecurity/
@@ -98,7 +97,9 @@ The packages should remain free of app lifecycle code. `CaptureCore`, `CaptureSt
 
 ## Status
 
-Phase 1 is implemented. The iPhone app can configure HTTP destinations, keep secrets in Keychain, create a durable test event, queue it in SQLite, attempt delivery, classify failures, retry, export local records, and delete events. The reusable packages have passing tests. The iOS target and local-network permission flow still need device validation.
+Phases 1 and 2 are implemented in code. The iPhone app can configure HTTP destinations, keep secrets in Keychain, create a durable test event, queue it in SQLite, attempt delivery, classify failures, retry, export local records, and delete events.
+
+The Apple Watch app saves button events and short AAC recordings to a protected local outbox. It keeps capture IDs stable, records permission and interruption failures, recovers finished audio after an app restart, and provides a complication and App Intent that open the visible capture screen. Package tests cover outbox persistence and failure handling. The iOS network path and watch audio behavior still need physical-device validation, including a full 60-second wrist-down recording and real route interruptions.
 
 The remaining implementation order and acceptance tests are in the [roadmap](docs/ROADMAP.md). The [architecture](docs/ARCHITECTURE.md) defines the data model, trust boundaries, delivery behavior, and known Apple Watch and Pebble limits.
 
@@ -122,7 +123,7 @@ Run the reusable package tests:
 swift test
 ```
 
-Open `Tapline.xcodeproj` in Xcode to run the iPhone app. A clean installation makes no network request until the user creates a destination or an existing queued job becomes eligible for retry.
+Open `Tapline.xcodeproj` in Xcode to run the iPhone or paired Apple Watch app. A clean installation makes no network request until the user creates a destination or an existing queued job becomes eligible for retry.
 
 ## Open-source policy
 

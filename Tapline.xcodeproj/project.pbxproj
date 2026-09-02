@@ -9,31 +9,102 @@
 /* Begin PBXBuildFile section */
 		00E53A81BC428C2E2B275287 /* DestinationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B0C09DE9A0A9307C40D20F /* DestinationViews.swift */; };
 		1CEE926CE751C163102C83E4 /* DeliveryKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB22952387B8BD396B7AE759 /* DeliveryKit */; };
+		277B5E08D0F9AA5147BADB1F /* TaplineWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBBF4891293B17FBB5F4F15 /* TaplineWatchApp.swift */; };
+		34113A4DE9E4987920A12D99 /* CaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA56737FA573F6268DE87DF /* CaptureView.swift */; };
 		40E033B349E1ED78D786F38E /* TaplineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1190E1A35C0F51441B19F27 /* TaplineApp.swift */; };
+		442D3CA74F790BEC2142A188 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FEDEE56F375233D7755A667A /* PrivacyInfo.xcprivacy */; };
 		57DD87B9FB1A59974FD571AB /* DestinationDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2056003331522A33E1E12C59 /* DestinationDraft.swift */; };
+		5BE2022DCD473CBF90EB1885 /* WatchCaptureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F75CCFBB28A84762A8588C /* WatchCaptureModel.swift */; };
 		5E3E3E1107B4268AC3EC1546 /* CaptureStore in Frameworks */ = {isa = PBXBuildFile; productRef = 0486A80CCD98AAF6393CC596 /* CaptureStore */; };
+		676AB22549FBC55E9BD4E142 /* TaplineWatchWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2BF758041D81EBBC344E40D3 /* TaplineWatchWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		907C436D0DA7511F9F7E5E40 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDEFC677E1D16BA28DF43A4 /* SettingsView.swift */; };
+		96F8F47DF094A6B102A5745F /* WatchCapture in Frameworks */ = {isa = PBXBuildFile; productRef = A8FF84EF133233C3864DF441 /* WatchCapture */; };
+		A9D32130CF79ED0A996AA3C7 /* OpenCaptureIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7080FBC410B63F44D88A15 /* OpenCaptureIntent.swift */; };
+		B0A934F61EC68C5506AB80A6 /* TaplineWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 00CCA4B3B7AF7E7B0993B768 /* TaplineWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B243399151EA4EC68FF0861A /* TaplineWatchWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5C3F99F08965EC0AC3861B /* TaplineWatchWidget.swift */; };
 		BE83E8B03EC4150AD9A5ED70 /* EndpointSecurity in Frameworks */ = {isa = PBXBuildFile; productRef = 2862686033D9FCBFC80B777B /* EndpointSecurity */; };
 		C04BA3E482638F3B32B75681 /* QueueViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF09398802A6C35F1273F71 /* QueueViews.swift */; };
+		C4B8DE8D2DEAB0FA79233BE3 /* CaptureCore in Frameworks */ = {isa = PBXBuildFile; productRef = 66A5152ADCFB4EE9D11A28AC /* CaptureCore */; };
 		E78C940D6B1FD1ED9E4FAB62 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 05EC9CB19C044A766C2BB05D /* PrivacyInfo.xcprivacy */; };
 		F87B5A96D36C59D099477923 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C856541B0F4BE01DF53E91 /* AppModel.swift */; };
 		FB61D776F1658E29BAF606DD /* CaptureCore in Frameworks */ = {isa = PBXBuildFile; productRef = C1129C4709AA1B0B6AA4343E /* CaptureCore */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7A513F0AF3DF9758FE604228 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76D86DE73645875D53039206 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 797EF42031C43AAAD4BEF310;
+			remoteInfo = TaplineWatch;
+		};
+		D23B875CA5E4D675B03A4C1A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 76D86DE73645875D53039206 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4366B6D03E56914C04CCD0AA;
+			remoteInfo = TaplineWatchWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7D1502210512E130ABAEAFF6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				676AB22549FBC55E9BD4E142 /* TaplineWatchWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB5BC0CEAB193E0A7B60C17B /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				B0A934F61EC68C5506AB80A6 /* TaplineWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		00CCA4B3B7AF7E7B0993B768 /* TaplineWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaplineWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03B0C09DE9A0A9307C40D20F /* DestinationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationViews.swift; sourceTree = "<group>"; };
 		05EC9CB19C044A766C2BB05D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		0A5C3F99F08965EC0AC3861B /* TaplineWatchWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaplineWatchWidget.swift; sourceTree = "<group>"; };
+		0EBBF4891293B17FBB5F4F15 /* TaplineWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaplineWatchApp.swift; sourceTree = "<group>"; };
+		1FA56737FA573F6268DE87DF /* CaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureView.swift; sourceTree = "<group>"; };
 		2056003331522A33E1E12C59 /* DestinationDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDraft.swift; sourceTree = "<group>"; };
+		2BF758041D81EBBC344E40D3 /* TaplineWatchWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TaplineWatchWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		301AFC48C2A8C6DD6DBB08E0 /* t3code-3d8ae599 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "t3code-3d8ae599"; path = .; sourceTree = SOURCE_ROOT; };
 		64C856541B0F4BE01DF53E91 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		6FE01CA565762C987E2507AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		788070161B931ECF24EF31F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9BF09398802A6C35F1273F71 /* QueueViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueViews.swift; sourceTree = "<group>"; };
 		BBDEFC677E1D16BA28DF43A4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BD1278836F5F25F643907EF9 /* TaplineiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TaplineiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C34D7418E2EE51B437C38B9A /* tapline */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tapline; path = .; sourceTree = SOURCE_ROOT; };
+		D26B69179A610CE3E92F788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E1190E1A35C0F51441B19F27 /* TaplineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaplineApp.swift; sourceTree = "<group>"; };
+		F8F75CCFBB28A84762A8588C /* WatchCaptureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchCaptureModel.swift; sourceTree = "<group>"; };
+		FC7080FBC410B63F44D88A15 /* OpenCaptureIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCaptureIntent.swift; sourceTree = "<group>"; };
+		FEDEE56F375233D7755A667A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5C95890AA046908A4EFB801E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4B8DE8D2DEAB0FA79233BE3 /* CaptureCore in Frameworks */,
+				96F8F47DF094A6B102A5745F /* WatchCapture in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C15C99DB9A8D6E8544D8AD1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -68,8 +139,23 @@
 			isa = PBXGroup;
 			children = (
 				BD1278836F5F25F643907EF9 /* TaplineiOS.app */,
+				00CCA4B3B7AF7E7B0993B768 /* TaplineWatch.app */,
+				2BF758041D81EBBC344E40D3 /* TaplineWatchWidget.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		69BB8A9C0AF9EA318646BB2D /* TaplineWatch */ = {
+			isa = PBXGroup;
+			children = (
+				1FA56737FA573F6268DE87DF /* CaptureView.swift */,
+				788070161B931ECF24EF31F6 /* Info.plist */,
+				FEDEE56F375233D7755A667A /* PrivacyInfo.xcprivacy */,
+				0EBBF4891293B17FBB5F4F15 /* TaplineWatchApp.swift */,
+				F8F75CCFBB28A84762A8588C /* WatchCaptureModel.swift */,
+			);
+			name = TaplineWatch;
+			path = Apps/TaplineWatch;
 			sourceTree = "<group>";
 		};
 		7CB7F9E1F6A973798E0716CE = {
@@ -77,14 +163,36 @@
 			children = (
 				DB164C4B53C869A4D027BC0F /* Packages */,
 				1E9FC0B398926E62204E9178 /* TaplineiOS */,
+				69BB8A9C0AF9EA318646BB2D /* TaplineWatch */,
+				8B5EB805FBD4D4569FE48BE7 /* TaplineWatchShared */,
+				9B6D3A74F81E55B06A3EB0DD /* TaplineWatchWidget */,
 				43403250A1F69CC760EEE0A8 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		8B5EB805FBD4D4569FE48BE7 /* TaplineWatchShared */ = {
+			isa = PBXGroup;
+			children = (
+				FC7080FBC410B63F44D88A15 /* OpenCaptureIntent.swift */,
+			);
+			name = TaplineWatchShared;
+			path = Apps/TaplineWatchShared;
+			sourceTree = "<group>";
+		};
+		9B6D3A74F81E55B06A3EB0DD /* TaplineWatchWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D26B69179A610CE3E92F788D /* Info.plist */,
+				0A5C3F99F08965EC0AC3861B /* TaplineWatchWidget.swift */,
+			);
+			name = TaplineWatchWidget;
+			path = Apps/TaplineWatchWidget;
 			sourceTree = "<group>";
 		};
 		DB164C4B53C869A4D027BC0F /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				C34D7418E2EE51B437C38B9A /* tapline */,
+				301AFC48C2A8C6DD6DBB08E0 /* t3code-3d8ae599 */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -99,10 +207,12 @@
 				9DD5D0A4ACDB508CFAA0B342 /* Sources */,
 				BA6803CF41944A4B837C4327 /* Resources */,
 				8C15C99DB9A8D6E8544D8AD1 /* Frameworks */,
+				BB5BC0CEAB193E0A7B60C17B /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				71233F069BC9C29C334FAB5E /* PBXTargetDependency */,
 			);
 			name = TaplineiOS;
 			packageProductDependencies = (
@@ -115,6 +225,46 @@
 			productReference = BD1278836F5F25F643907EF9 /* TaplineiOS.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4366B6D03E56914C04CCD0AA /* TaplineWatchWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7E60044830208BAAF7A43C34 /* Build configuration list for PBXNativeTarget "TaplineWatchWidget" */;
+			buildPhases = (
+				03AEF808F669E6F9A4722DCC /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TaplineWatchWidget;
+			packageProductDependencies = (
+			);
+			productName = TaplineWatchWidget;
+			productReference = 2BF758041D81EBBC344E40D3 /* TaplineWatchWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		797EF42031C43AAAD4BEF310 /* TaplineWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DD092A702E59BC75AA729A4 /* Build configuration list for PBXNativeTarget "TaplineWatch" */;
+			buildPhases = (
+				C31490AD8550614773218387 /* Sources */,
+				920109A87FF743EA27D07055 /* Resources */,
+				5C95890AA046908A4EFB801E /* Frameworks */,
+				7D1502210512E130ABAEAFF6 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42EE449A66F998C6135AFAAA /* PBXTargetDependency */,
+			);
+			name = TaplineWatch;
+			packageProductDependencies = (
+				66A5152ADCFB4EE9D11A28AC /* CaptureCore */,
+				A8FF84EF133233C3864DF441 /* WatchCapture */,
+			);
+			productName = TaplineWatch;
+			productReference = 00CCA4B3B7AF7E7B0993B768 /* TaplineWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -125,6 +275,12 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					4221489D75FD10AC6D8508BC = {
+						ProvisioningStyle = Automatic;
+					};
+					4366B6D03E56914C04CCD0AA = {
+						ProvisioningStyle = Automatic;
+					};
+					797EF42031C43AAAD4BEF310 = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -147,11 +303,21 @@
 			projectRoot = "";
 			targets = (
 				4221489D75FD10AC6D8508BC /* TaplineiOS */,
+				797EF42031C43AAAD4BEF310 /* TaplineWatch */,
+				4366B6D03E56914C04CCD0AA /* TaplineWatchWidget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		920109A87FF743EA27D07055 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				442D3CA74F790BEC2142A188 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BA6803CF41944A4B837C4327 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -163,6 +329,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		03AEF808F669E6F9A4722DCC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B243399151EA4EC68FF0861A /* TaplineWatchWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9DD5D0A4ACDB508CFAA0B342 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -176,9 +350,52 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C31490AD8550614773218387 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34113A4DE9E4987920A12D99 /* CaptureView.swift in Sources */,
+				A9D32130CF79ED0A996AA3C7 /* OpenCaptureIntent.swift in Sources */,
+				277B5E08D0F9AA5147BADB1F /* TaplineWatchApp.swift in Sources */,
+				5BE2022DCD473CBF90EB1885 /* WatchCaptureModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		42EE449A66F998C6135AFAAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4366B6D03E56914C04CCD0AA /* TaplineWatchWidget */;
+			targetProxy = D23B875CA5E4D675B03A4C1A /* PBXContainerItemProxy */;
+		};
+		71233F069BC9C29C334FAB5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 797EF42031C43AAAD4BEF310 /* TaplineWatch */;
+			targetProxy = 7A513F0AF3DF9758FE604228 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		05B9F6C246A8BAC70D8C408C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Apps/TaplineWatchWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.watchapp.widget;
+				PRODUCT_NAME = TaplineWatchWidget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
 		1116D11E42694EB2129DC5E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -195,6 +412,20 @@
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		24F4D2D8082AE8829F5EB7B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Apps/TaplineWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.watchapp;
+				PRODUCT_NAME = Tapline;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = Debug;
 		};
@@ -249,11 +480,11 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Release;
 		};
@@ -315,13 +546,27 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Debug;
+		};
+		895B36408B7E9FFF4BF5226F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Apps/TaplineWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.watchapp;
+				PRODUCT_NAME = Tapline;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
 		};
 		A1AA876A8DBFB00008A4125C /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -342,6 +587,25 @@
 			};
 			name = Release;
 		};
+		C93A5815BB949DE2D1546D9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Apps/TaplineWatchWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.watchapp.widget;
+				PRODUCT_NAME = TaplineWatchWidget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -350,6 +614,24 @@
 			buildConfigurations = (
 				7B080B0E3328B4C0A889ADD8 /* Debug */,
 				31587B907CF5D142C306BBD9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3DD092A702E59BC75AA729A4 /* Build configuration list for PBXNativeTarget "TaplineWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24F4D2D8082AE8829F5EB7B8 /* Debug */,
+				895B36408B7E9FFF4BF5226F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7E60044830208BAAF7A43C34 /* Build configuration list for PBXNativeTarget "TaplineWatchWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C93A5815BB949DE2D1546D9D /* Debug */,
+				05B9F6C246A8BAC70D8C408C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -380,6 +662,14 @@
 		2862686033D9FCBFC80B777B /* EndpointSecurity */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EndpointSecurity;
+		};
+		66A5152ADCFB4EE9D11A28AC /* CaptureCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CaptureCore;
+		};
+		A8FF84EF133233C3864DF441 /* WatchCapture */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WatchCapture;
 		};
 		C1129C4709AA1B0B6AA4343E /* CaptureCore */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -4,6 +4,7 @@ options:
   bundleIdPrefix: app.tapline
   deploymentTarget:
     iOS: "18.0"
+    watchOS: "11.0"
   generateEmptyDirectories: true
   groupSortPosition: top
 
@@ -48,4 +49,49 @@ targets:
         product: DeliveryKit
       - package: TaplinePackages
         product: EndpointSecurity
+      - target: TaplineWatch
 
+  TaplineWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: Apps/TaplineWatch
+      - path: Apps/TaplineWatchShared
+    info:
+      path: Apps/TaplineWatch/Info.plist
+      properties:
+        CFBundleDisplayName: Tapline
+        NSMicrophoneUsageDescription: Tapline records only when you press the visible record button.
+        WKCompanionAppBundleIdentifier: app.tapline.ios
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.tapline.watchapp
+        PRODUCT_NAME: Tapline
+        GENERATE_INFOPLIST_FILE: false
+        TARGETED_DEVICE_FAMILY: "4"
+    dependencies:
+      - package: TaplinePackages
+        product: CaptureCore
+      - package: TaplinePackages
+        product: WatchCapture
+      - target: TaplineWatchWidget
+        embed: true
+
+  TaplineWatchWidget:
+    type: app-extension
+    platform: watchOS
+    sources:
+      - path: Apps/TaplineWatchWidget
+    info:
+      path: Apps/TaplineWatchWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Tapline capture
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.tapline.watchapp.widget
+        PRODUCT_NAME: TaplineWatchWidget
+        GENERATE_INFOPLIST_FILE: false
+        SKIP_INSTALL: true
+        APPLICATION_EXTENSION_API_ONLY: true
