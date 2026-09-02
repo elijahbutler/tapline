@@ -414,8 +414,8 @@ final class WatchCaptureModel: NSObject, ObservableObject {
         let format = file.processingFormat
         let measuredDuration = format.sampleRate > 0
             ? Double(file.length) / format.sampleRate
-            : fallbackDuration
-        let duration = max(measuredDuration, fallbackDuration)
+            : 0
+        let duration = measuredDuration > 0 ? measuredDuration : fallbackDuration
         guard duration > 0, format.channelCount > 0 else {
             throw AudioInspectionError.invalidRecording
         }
