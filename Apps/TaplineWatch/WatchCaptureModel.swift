@@ -225,7 +225,7 @@ final class WatchCaptureModel: NSObject, ObservableObject {
         let inspection: AudioInspection
         do {
             inspection = try Self.inspectAudio(at: capture.fileURL, fallbackDuration: recorderDuration)
-        } catch {
+        } catch AudioInspectionError.invalidRecording {
             _ = try? await outbox.recordFailure(
                 id: capture.id,
                 occurredAt: capture.occurredAt,
@@ -242,6 +242,11 @@ final class WatchCaptureModel: NSObject, ObservableObject {
                     ? "Audio changed before a playable clip could be saved."
                     : "The recording could not be saved as playable audio."
             )
+            return
+        } catch {
+            activeCapture = nil
+            elapsed = 0
+            state = .failed("Recording is saved locally and will retry when Tapline opens again.")
             return
         }
 
@@ -277,7 +282,7 @@ final class WatchCaptureModel: NSObject, ObservableObject {
         let inspection: AudioInspection
         do {
             inspection = try Self.inspectAudio(at: capture.fileURL, fallbackDuration: 0)
-        } catch {
+        } catch AudioInspectionError.invalidRecording {
             _ = try? await outbox.recordFailure(
                 id: capture.id,
                 occurredAt: capture.occurredAt,
@@ -285,6 +290,9 @@ final class WatchCaptureModel: NSObject, ObservableObject {
                 message: "Tapline closed before the recording became playable."
             )
             state = .failed("A previous recording ended before it became playable.")
+            return
+        } catch {
+            state = .failed("A previous recording is saved locally and will retry.")
             return
         }
 
@@ -384,17 +392,23 @@ final class WatchCaptureModel: NSObject, ObservableObject {
     private static func inspectAudio(at url: URL, fallbackDuration: TimeInterval) throws -> AudioInspection {
         let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
         guard (attributes[.size] as? NSNumber)?.int64Value ?? 0 > 0 else {
-            throw WatchCaptureOutboxError.emptyAudioFile
+            throw AudioInspectionError.invalidRecording
         }
 
-        let file = try AVAudioFile(forReading: url)
+        let file: AVAudioFile
+        do {
+            file = try AVAudioFile(forReading: url)
+        } catch {
+            guard isStructurallyInvalidAudio(error) else { throw error }
+            throw AudioInspectionError.invalidRecording
+        }
         let format = file.processingFormat
         let measuredDuration = format.sampleRate > 0
             ? Double(file.length) / format.sampleRate
             : fallbackDuration
         let duration = max(measuredDuration, fallbackDuration)
         guard duration > 0, format.channelCount > 0 else {
-            throw WatchCaptureOutboxError.emptyAudioFile
+            throw AudioInspectionError.invalidRecording
         }
 
         return AudioInspection(
@@ -403,10 +417,27 @@ final class WatchCaptureModel: NSObject, ObservableObject {
             channelCount: Int(format.channelCount)
         )
     }
+
+    private static func isStructurallyInvalidAudio(_ error: Error) -> Bool {
+        let error = error as NSError
+        guard error.domain == NSOSStatusErrorDomain else { return false }
+        let invalidAudioCodes: Set<Int> = [
+            0x7479703F, // typ?
+            0x666D743F, // fmt?
+            0x63686B3F, // chk?
+            0x70636B3F, // pck?
+            0x6474613F, // dta?
+        ]
+        return invalidAudioCodes.contains(error.code)
+    }
 }
 
 private enum WatchRecorderError: Error {
     case couldNotStart
+}
+
+private enum AudioInspectionError: Error {
+    case invalidRecording
 }
 
 extension WatchCaptureModel: AVAudioRecorderDelegate {
