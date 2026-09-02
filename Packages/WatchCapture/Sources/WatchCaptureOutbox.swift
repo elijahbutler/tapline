@@ -195,7 +195,9 @@ public actor WatchCaptureOutbox {
 
         if discardActiveCapture {
             let active = activeDirectory.appending(path: id.uuidString.lowercased(), directoryHint: .isDirectory)
-            if fileManager.fileExists(atPath: active.path) {
+            let committedEvent = active.appending(path: eventFilename)
+            if fileManager.fileExists(atPath: active.path),
+               !fileManager.fileExists(atPath: committedEvent.path) {
                 try fileManager.removeItem(at: active)
             }
         }

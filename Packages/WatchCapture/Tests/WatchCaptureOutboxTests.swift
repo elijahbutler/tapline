@@ -103,6 +103,43 @@ final class WatchCaptureOutboxTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: active.path))
     }
 
+    func testFailureCleanupDoesNotDeleteCommittedAudio() async throws {
+        let eventID = UUID()
+        let outbox = WatchCaptureOutbox(
+            rootDirectory: temporaryDirectory,
+            fileManager: FailOnceActiveMoveFileManager()
+        )
+        let capture = try await outbox.beginAudioCapture(id: eventID)
+        try Data("audio".utf8).write(to: capture.fileURL)
+        let event = try await outbox.commitAudioCapture(
+            capture,
+            source: source,
+            durationMilliseconds: 100,
+            sampleRateHertz: 16_000,
+            channelCount: 1
+        )
+
+        try await outbox.recordFailure(
+            id: eventID,
+            occurredAt: capture.occurredAt,
+            code: .invalidRecording,
+            message: "Queue refresh failed after commit."
+        )
+
+        let active = temporaryDirectory.appending(
+            path: "active/\(eventID.uuidString.lowercased())",
+            directoryHint: .isDirectory
+        )
+        XCTAssertTrue(FileManager.default.fileExists(atPath: active.appending(path: "event.json").path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: active.appending(path: "audio.m4a").path))
+
+        let relaunched = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        let snapshot = try await relaunched.snapshot()
+
+        XCTAssertEqual(snapshot.items.map(\.event), [event])
+        XCTAssertEqual(snapshot.failures.map(\.id), [eventID])
+    }
+
     func testDeniedPermissionPersistsFailureWithoutAudioFile() async throws {
         let eventID = UUID()
         let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)

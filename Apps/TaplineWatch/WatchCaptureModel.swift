@@ -124,7 +124,7 @@ final class WatchCaptureModel: NSObject, ObservableObject {
         state = .saving
         do {
             _ = try await outbox.commitButtonEvent(source: eventSource)
-            try await refreshSnapshot(using: outbox)
+            _ = try? await refreshSnapshot(using: outbox)
             state = .saved("Event saved on this watch")
         } catch {
             state = .failed("The event could not be saved. Check watch storage.")
@@ -234,7 +234,7 @@ final class WatchCaptureModel: NSObject, ObservableObject {
             )
             activeCapture = nil
             elapsed = 0
-            try await refreshSnapshot(using: outbox)
+            _ = try? await refreshSnapshot(using: outbox)
             if interrupted {
                 state = .interrupted("Audio changed. The finished part was saved.")
             } else {
