@@ -221,12 +221,7 @@ final class WatchCaptureOutboxTests: XCTestCase {
             fileManager: failingFileManager
         )
 
-        do {
-            _ = try await outbox.commitButtonEvent(id: eventID, source: source)
-            XCTFail("Expected the first promotion to fail")
-        } catch {
-            XCTAssertEqual((error as NSError).domain, FailOnceStagingMoveFileManager.errorDomain)
-        }
+        let event = try await outbox.commitButtonEvent(id: eventID, source: source)
 
         let staging = temporaryDirectory.appending(
             path: "staging/\(eventID.uuidString.lowercased())",
@@ -237,7 +232,39 @@ final class WatchCaptureOutboxTests: XCTestCase {
         let relaunched = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
         let snapshot = try await relaunched.snapshot()
 
-        XCTAssertEqual(snapshot.items.map(\.id), [eventID])
+        XCTAssertEqual(snapshot.items.map(\.event), [event])
+        XCTAssertFalse(FileManager.default.fileExists(atPath: staging.path))
+    }
+
+    func testValidatedStagedEventRetriesTransientRecoveryPromotion() async throws {
+        let event = CaptureEvent(
+            id: UUID(),
+            type: .buttonPressed,
+            occurredAt: .now,
+            capturedAt: .now,
+            source: source
+        )
+        let staging = temporaryDirectory.appending(
+            path: "staging/\(event.id.uuidString.lowercased())",
+            directoryHint: .isDirectory
+        )
+        try FileManager.default.createDirectory(at: staging, withIntermediateDirectories: true)
+        try EventCodec.encode(event).write(to: staging.appending(path: "event.json"), options: .atomic)
+        let outbox = WatchCaptureOutbox(
+            rootDirectory: temporaryDirectory,
+            fileManager: FailOnceStagingMoveFileManager()
+        )
+
+        let firstSnapshot = try await outbox.snapshot()
+
+        XCTAssertTrue(firstSnapshot.items.isEmpty)
+        XCTAssertTrue(firstSnapshot.failures.isEmpty)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: staging.path))
+
+        let secondSnapshot = try await outbox.snapshot()
+
+        XCTAssertEqual(secondSnapshot.items.map(\.event), [event])
+        XCTAssertTrue(secondSnapshot.failures.isEmpty)
         XCTAssertFalse(FileManager.default.fileExists(atPath: staging.path))
     }
 
@@ -328,15 +355,13 @@ final class WatchCaptureOutboxTests: XCTestCase {
 }
 
 private final class FailOnceStagingMoveFileManager: FileManager, @unchecked Sendable {
-    static let errorDomain = "WatchCaptureOutboxTests.TransientMove"
-
     private var shouldFailStagingMove = true
 
     override func moveItem(at sourceURL: URL, to destinationURL: URL) throws {
         if shouldFailStagingMove,
            sourceURL.deletingLastPathComponent().lastPathComponent == "staging" {
             shouldFailStagingMove = false
-            throw NSError(domain: Self.errorDomain, code: 1)
+            throw NSError(domain: "WatchCaptureOutboxTests.TransientStagingMove", code: 1)
         }
         try super.moveItem(at: sourceURL, to: destinationURL)
     }

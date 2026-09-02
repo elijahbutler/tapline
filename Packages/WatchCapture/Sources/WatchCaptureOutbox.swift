@@ -167,15 +167,12 @@ public actor WatchCaptureOutbox {
         )
         do {
             try writeEvent(event, to: staging)
-            try moveCommittedDirectory(staging, eventID: event.id)
-            return event
         } catch {
-            let eventURL = staging.appending(path: eventFilename)
-            if !fileManager.fileExists(atPath: eventURL.path) {
-                try? fileManager.removeItem(at: staging)
-            }
+            try? fileManager.removeItem(at: staging)
             throw error
         }
+        try? moveCommittedDirectory(staging, eventID: event.id)
+        return event
     }
 
     @discardableResult
@@ -327,18 +324,27 @@ public actor WatchCaptureOutbox {
     }
 
     private func recoverCommittedDirectory(_ directory: URL, removingDraft: Bool) {
+        let event: CaptureEvent
         do {
-            let event = try EventCodec.decode(Data(contentsOf: directory.appending(path: eventFilename)))
+            event = try EventCodec.decode(Data(contentsOf: directory.appending(path: eventFilename)))
             guard directory.lastPathComponent == event.id.uuidString.lowercased() else {
                 throw WatchCaptureOutboxError.captureNotActive(event.id)
             }
-            let draftURL = directory.appending(path: draftFilename)
-            if removingDraft, fileManager.fileExists(atPath: draftURL.path) {
-                try fileManager.removeItem(at: draftURL)
-            }
-            try moveCommittedDirectory(directory, eventID: event.id)
         } catch {
             quarantine(directory, message: "A capture could not be recovered and was moved aside.")
+            return
+        }
+
+        let draftURL = directory.appending(path: draftFilename)
+        if removingDraft, fileManager.fileExists(atPath: draftURL.path) {
+            try? fileManager.removeItem(at: draftURL)
+        }
+        do {
+            try moveCommittedDirectory(directory, eventID: event.id)
+        } catch WatchCaptureOutboxError.captureAlreadyExists(_) {
+            quarantine(directory, message: "A duplicate capture was moved aside.")
+        } catch {
+            return
         }
     }
 
