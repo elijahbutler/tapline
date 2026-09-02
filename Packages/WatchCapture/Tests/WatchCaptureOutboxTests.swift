@@ -351,6 +351,57 @@ final class WatchCaptureOutboxTests: XCTestCase {
         XCTAssertEqual(refreshed.items.map(\.id).sorted(), [valid.id, next.id].sorted())
     }
 
+    func testPendingCaptureRetriesTransientEventReadFailure() async throws {
+        let writer = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        let event = try await writer.commitButtonEvent(source: source)
+        let outbox = WatchCaptureOutbox(
+            rootDirectory: temporaryDirectory,
+            fileManager: FailOnceEventReadFileManager()
+        )
+
+        let firstSnapshot = try await outbox.snapshot()
+
+        XCTAssertTrue(firstSnapshot.items.isEmpty)
+        XCTAssertTrue(firstSnapshot.failures.isEmpty)
+
+        let secondSnapshot = try await outbox.snapshot()
+
+        XCTAssertEqual(secondSnapshot.items.map(\.event), [event])
+        XCTAssertTrue(secondSnapshot.failures.isEmpty)
+    }
+
+    func testStagedCaptureRetriesTransientEventReadFailure() async throws {
+        let event = CaptureEvent(
+            id: UUID(),
+            type: .buttonPressed,
+            occurredAt: .now,
+            capturedAt: .now,
+            source: source
+        )
+        let staging = temporaryDirectory.appending(
+            path: "staging/\(event.id.uuidString.lowercased())",
+            directoryHint: .isDirectory
+        )
+        try FileManager.default.createDirectory(at: staging, withIntermediateDirectories: true)
+        try EventCodec.encode(event).write(to: staging.appending(path: "event.json"), options: .atomic)
+        let outbox = WatchCaptureOutbox(
+            rootDirectory: temporaryDirectory,
+            fileManager: FailOnceEventReadFileManager()
+        )
+
+        let firstSnapshot = try await outbox.snapshot()
+
+        XCTAssertTrue(firstSnapshot.items.isEmpty)
+        XCTAssertTrue(firstSnapshot.failures.isEmpty)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: staging.path))
+
+        let secondSnapshot = try await outbox.snapshot()
+
+        XCTAssertEqual(secondSnapshot.items.map(\.event), [event])
+        XCTAssertTrue(secondSnapshot.failures.isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: staging.path))
+    }
+
     func testEmptyAudioCannotBecomeCapturedEvent() async throws {
         let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
         let capture = try await outbox.beginAudioCapture()
@@ -414,5 +465,17 @@ private final class FailOnceActiveMoveFileManager: FileManager, @unchecked Senda
             throw NSError(domain: "WatchCaptureOutboxTests.TransientActiveMove", code: 1)
         }
         try super.moveItem(at: sourceURL, to: destinationURL)
+    }
+}
+
+private final class FailOnceEventReadFileManager: FileManager, @unchecked Sendable {
+    private var shouldFailEventRead = true
+
+    override func contents(atPath path: String) -> Data? {
+        if shouldFailEventRead, path.hasSuffix("/event.json") {
+            shouldFailEventRead = false
+            return nil
+        }
+        return super.contents(atPath: path)
     }
 }

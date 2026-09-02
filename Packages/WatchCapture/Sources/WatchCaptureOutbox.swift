@@ -211,8 +211,16 @@ public actor WatchCaptureOutbox {
         var recoveryFailures: [WatchCaptureFailure] = []
         var items: [WatchOutboxItem] = []
         for directory in try directories(in: pendingDirectory) {
+            let eventURL = directory.appending(path: eventFilename)
+            guard fileManager.fileExists(atPath: eventURL.path) else {
+                recoveryFailures.append(
+                    quarantine(directory, message: "A saved capture was incomplete and moved aside.")
+                )
+                continue
+            }
+            guard let eventData = fileManager.contents(atPath: eventURL.path) else { continue }
             do {
-                let event = try EventCodec.decode(Data(contentsOf: directory.appending(path: eventFilename)))
+                let event = try EventCodec.decode(eventData)
                 guard directory.lastPathComponent == event.id.uuidString.lowercased() else {
                     throw WatchCaptureOutboxError.captureNotActive(event.id)
                 }
@@ -233,8 +241,9 @@ public actor WatchCaptureOutbox {
         for directory in try directories(in: activeDirectory) {
             let draftURL = directory.appending(path: draftFilename)
             guard fileManager.fileExists(atPath: draftURL.path) else { continue }
+            guard let draftData = fileManager.contents(atPath: draftURL.path) else { continue }
             do {
-                let draft = try readJSON(PersistedAudioCapture.self, from: draftURL)
+                let draft = try decodeJSON(PersistedAudioCapture.self, from: draftData)
                 guard directory.lastPathComponent == draft.id.uuidString.lowercased() else {
                     throw WatchCaptureOutboxError.captureNotActive(draft.id)
                 }
@@ -256,8 +265,9 @@ public actor WatchCaptureOutbox {
 
         var failures = recoveryFailures
         for file in try files(in: failuresDirectory, extension: "json") {
+            guard let failureData = fileManager.contents(atPath: file.path) else { continue }
             do {
-                failures.append(try readJSON(WatchCaptureFailure.self, from: file))
+                failures.append(try decodeJSON(WatchCaptureFailure.self, from: failureData))
             } catch {
                 failures.append(
                     quarantine(file, message: "A saved failure record was unreadable and moved aside.")
@@ -326,9 +336,16 @@ public actor WatchCaptureOutbox {
     }
 
     private func recoverCommittedDirectory(_ directory: URL, removingDraft: Bool) {
+        let eventURL = directory.appending(path: eventFilename)
+        guard fileManager.fileExists(atPath: eventURL.path) else {
+            quarantine(directory, message: "An incomplete capture was moved aside.")
+            return
+        }
+        guard let eventData = fileManager.contents(atPath: eventURL.path) else { return }
+
         let event: CaptureEvent
         do {
-            event = try EventCodec.decode(Data(contentsOf: directory.appending(path: eventFilename)))
+            event = try EventCodec.decode(eventData)
             guard directory.lastPathComponent == event.id.uuidString.lowercased() else {
                 throw WatchCaptureOutboxError.captureNotActive(event.id)
             }
@@ -391,9 +408,13 @@ public actor WatchCaptureOutbox {
     }
 
     private func readJSON<T: Decodable>(_ type: T.Type = T.self, from url: URL) throws -> T {
+        try decodeJSON(type, from: Data(contentsOf: url))
+    }
+
+    private func decodeJSON<T: Decodable>(_ type: T.Type = T.self, from data: Data) throws -> T {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .millisecondsSince1970
-        return try decoder.decode(type, from: Data(contentsOf: url))
+        return try decoder.decode(type, from: data)
     }
 
     private func directories(in directory: URL) throws -> [URL] {
