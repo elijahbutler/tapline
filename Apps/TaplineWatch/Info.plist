@@ -33,6 +33,10 @@
 	<string>1</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Tapline records only when you press the visible record button.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>

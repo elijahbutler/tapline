@@ -67,6 +67,8 @@ targets:
             CFBundleURLSchemes:
               - tapline
         NSMicrophoneUsageDescription: Tapline records only when you press the visible record button.
+        UIBackgroundModes:
+          - audio
         WKApplication: true
         WKCompanionAppBundleIdentifier: app.tapline.ios
     settings:
