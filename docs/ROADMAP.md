@@ -2,13 +2,15 @@
 
 This roadmap orders work by proof, not feature count. Each phase must leave captured data safer than the phase before it. Direct BLE support waits until the Apple Watch, queue, and delivery contracts work end to end.
 
+Current status: phase 1 code and package tests are complete. Physical iPhone validation, local-network permission checks, and release work remain open.
+
 ## Phase 0: settle the public contract and test the risky APIs
 
 Goal: remove the largest device and policy unknowns before building the product shell.
 
 Work:
 
-- Add an OSI-approved `LICENSE`, with MPL 2.0 as the current recommendation.
+- Add the MPL 2.0 `LICENSE`. Completed.
 - Add contribution, security-reporting, code-of-conduct, and release policies.
 - Publish event schema version `1` and two example receiver fixtures.
 - Create a minimal iOS and watchOS workspace targeting iOS 18 and watchOS 11.

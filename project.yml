@@ -1,0 +1,51 @@
+name: Tapline
+
+options:
+  bundleIdPrefix: app.tapline
+  deploymentTarget:
+    iOS: "18.0"
+  generateEmptyDirectories: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ENABLE_USER_SCRIPT_SANDBOXING: true
+    CODE_SIGN_STYLE: Automatic
+
+packages:
+  TaplinePackages:
+    path: .
+
+targets:
+  TaplineiOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: Apps/TaplineiOS
+    info:
+      path: Apps/TaplineiOS/Info.plist
+      properties:
+        CFBundleDisplayName: Tapline
+        UILaunchScreen: {}
+        NSLocalNetworkUsageDescription: Tapline connects only to destinations you configure on your local network.
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.tapline.ios
+        PRODUCT_NAME: Tapline
+        GENERATE_INFOPLIST_FILE: false
+        SUPPORTS_MACCATALYST: false
+        TARGETED_DEVICE_FAMILY: "1,2"
+    dependencies:
+      - package: TaplinePackages
+        product: CaptureCore
+      - package: TaplinePackages
+        product: CaptureStore
+      - package: TaplinePackages
+        product: DeliveryKit
+      - package: TaplinePackages
+        product: EndpointSecurity
+

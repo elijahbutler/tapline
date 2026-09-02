@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tapline.app/schemas/capture-event-v1.schema.json",
+  "title": "Tapline capture event version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "type",
+    "occurredAt",
+    "capturedAt",
+    "source",
+    "payload",
+    "media",
+    "links"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "format": "uuid" },
+    "type": {
+      "enum": [
+        "button.pressed",
+        "button.released",
+        "audio.started",
+        "audio.captured",
+        "transcript.created",
+        "delivery.test"
+      ]
+    },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "source": { "$ref": "#/$defs/source" },
+    "payload": { "type": "object" },
+    "media": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/media" }
+    },
+    "links": { "$ref": "#/$defs/links" }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "installationID", "appVersion", "adapter"],
+      "properties": {
+        "kind": { "enum": ["apple_watch", "iphone", "ble_wearable", "imported"] },
+        "installationID": { "type": "string", "format": "uuid" },
+        "model": { "type": ["string", "null"] },
+        "osVersion": { "type": ["string", "null"] },
+        "appVersion": { "type": "string" },
+        "adapter": { "type": "string" }
+      }
+    },
+    "media": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "mediaType", "byteCount", "sha256"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "role": { "type": "string" },
+        "mediaType": { "type": "string" },
+        "byteCount": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "durationMilliseconds": { "type": ["integer", "null"], "minimum": 0 },
+        "sampleRateHertz": { "type": ["integer", "null"], "minimum": 1 },
+        "channelCount": { "type": ["integer", "null"], "minimum": 1 }
+      }
+    },
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "derivedFrom": { "type": ["string", "null"], "format": "uuid" },
+        "sessionID": { "type": ["string", "null"], "format": "uuid" }
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@ Tapline is a proposed local-first capture system for Apple Watch, iPhone, and op
 
 The first release will support an Apple Watch capture app, an iPhone queue and gateway, and configurable HTTP destinations. Home Assistant, n8n, Ollama, self-hosted transcription, and MCP integrations can sit behind those destinations without making any one service mandatory.
 
-This repository currently contains the product and system design. It does not contain an implementation yet.
+This repository contains the product design and the phase 1 iPhone implementation. Apple Watch capture and WatchConnectivity arrive in later phases.
 
 ## What Tapline is for
 
@@ -98,7 +98,31 @@ The packages should remain free of app lifecycle code. `CaptureCore`, `CaptureSt
 
 ## Status
 
-Tapline is in phase 0, specification and device spikes. The implementation order and acceptance tests are in the [roadmap](docs/ROADMAP.md). The [architecture](docs/ARCHITECTURE.md) defines the data model, trust boundaries, delivery behavior, and known Apple Watch and Pebble limits.
+Phase 1 is implemented. The iPhone app can configure HTTP destinations, keep secrets in Keychain, create a durable test event, queue it in SQLite, attempt delivery, classify failures, retry, export local records, and delete events. The reusable packages have passing tests. The iOS target and local-network permission flow still need device validation.
+
+The remaining implementation order and acceptance tests are in the [roadmap](docs/ROADMAP.md). The [architecture](docs/ARCHITECTURE.md) defines the data model, trust boundaries, delivery behavior, and known Apple Watch and Pebble limits.
+
+## Development
+
+Requirements:
+
+- Xcode 26 or later
+- XcodeGen 2.46 or later
+- Swift 6.2 or later
+
+Generate the project after changing `project.yml`:
+
+```sh
+xcodegen generate
+```
+
+Run the reusable package tests:
+
+```sh
+swift test
+```
+
+Open `Tapline.xcodeproj` in Xcode to run the iPhone app. A clean installation makes no network request until the user creates a destination or an existing queued job becomes eligible for retry.
 
 ## Open-source policy
 
@@ -111,11 +135,9 @@ Source visibility alone is not an open-source license. Before accepting contribu
 - a documented release process with reproducible version tags; and
 - a protocol versioning and deprecation policy.
 
-The recommended default is [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/2.0/). Its file-level copyleft requires changes to covered source files to remain available while allowing linking with separately licensed receiver and adapter code. Tapline still needs a dependency-by-dependency App Store distribution review. [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) is the simpler permissive alternative. GPL-family licensing needs a deliberate App Store review and should not be adopted casually.
+Tapline uses the [Mozilla Public License 2.0](LICENSE). Its file-level copyleft requires changes to covered source files to remain available while allowing linking with separately licensed receiver and adapter code. Tapline still needs a dependency-by-dependency App Store distribution review.
 
 The project should use a [Developer Certificate of Origin](https://developercertificate.org/) sign-off rather than a contributor agreement that gives one party an undisclosed private relicensing advantage. Design changes to the public event schema and adapter interfaces should happen through public architecture decision records.
-
-No license has been selected merely by writing this recommendation. Until a `LICENSE` file is committed, normal copyright restrictions apply.
 
 ## Security and privacy reports
 

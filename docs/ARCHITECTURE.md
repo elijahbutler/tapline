@@ -669,7 +669,6 @@ These require a spike or a product decision:
 - Which exact watchOS runtime state keeps a 60-second AVFoundation recording active across wrist-down on each supported OS and watch generation?
 - Should the WatchConnectivity transfer unit be an archive or a media file with a complete metadata envelope?
 - Does the first release use GRDB or a smaller SQLite wrapper?
-- Will the public license use the recommended MPL 2.0 terms or the more permissive Apache 2.0 terms?
 - Which certificate-pin format gives users enough safety without making renewal unmanageable?
 - Should deleted source audio cascade to transcripts by default or ask per retention policy?
 - Which Index 01 facts remain reproducible across current firmware and the public companion-app build?

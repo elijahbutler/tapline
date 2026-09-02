@@ -1,0 +1,395 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00E53A81BC428C2E2B275287 /* DestinationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B0C09DE9A0A9307C40D20F /* DestinationViews.swift */; };
+		1CEE926CE751C163102C83E4 /* DeliveryKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB22952387B8BD396B7AE759 /* DeliveryKit */; };
+		40E033B349E1ED78D786F38E /* TaplineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1190E1A35C0F51441B19F27 /* TaplineApp.swift */; };
+		57DD87B9FB1A59974FD571AB /* DestinationDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2056003331522A33E1E12C59 /* DestinationDraft.swift */; };
+		5E3E3E1107B4268AC3EC1546 /* CaptureStore in Frameworks */ = {isa = PBXBuildFile; productRef = 0486A80CCD98AAF6393CC596 /* CaptureStore */; };
+		907C436D0DA7511F9F7E5E40 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDEFC677E1D16BA28DF43A4 /* SettingsView.swift */; };
+		BE83E8B03EC4150AD9A5ED70 /* EndpointSecurity in Frameworks */ = {isa = PBXBuildFile; productRef = 2862686033D9FCBFC80B777B /* EndpointSecurity */; };
+		C04BA3E482638F3B32B75681 /* QueueViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF09398802A6C35F1273F71 /* QueueViews.swift */; };
+		E78C940D6B1FD1ED9E4FAB62 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 05EC9CB19C044A766C2BB05D /* PrivacyInfo.xcprivacy */; };
+		F87B5A96D36C59D099477923 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C856541B0F4BE01DF53E91 /* AppModel.swift */; };
+		FB61D776F1658E29BAF606DD /* CaptureCore in Frameworks */ = {isa = PBXBuildFile; productRef = C1129C4709AA1B0B6AA4343E /* CaptureCore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		03B0C09DE9A0A9307C40D20F /* DestinationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationViews.swift; sourceTree = "<group>"; };
+		05EC9CB19C044A766C2BB05D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		2056003331522A33E1E12C59 /* DestinationDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDraft.swift; sourceTree = "<group>"; };
+		64C856541B0F4BE01DF53E91 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		6FE01CA565762C987E2507AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9BF09398802A6C35F1273F71 /* QueueViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueViews.swift; sourceTree = "<group>"; };
+		BBDEFC677E1D16BA28DF43A4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		BD1278836F5F25F643907EF9 /* TaplineiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TaplineiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C34D7418E2EE51B437C38B9A /* tapline */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tapline; path = .; sourceTree = SOURCE_ROOT; };
+		E1190E1A35C0F51441B19F27 /* TaplineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaplineApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8C15C99DB9A8D6E8544D8AD1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB61D776F1658E29BAF606DD /* CaptureCore in Frameworks */,
+				5E3E3E1107B4268AC3EC1546 /* CaptureStore in Frameworks */,
+				1CEE926CE751C163102C83E4 /* DeliveryKit in Frameworks */,
+				BE83E8B03EC4150AD9A5ED70 /* EndpointSecurity in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1E9FC0B398926E62204E9178 /* TaplineiOS */ = {
+			isa = PBXGroup;
+			children = (
+				64C856541B0F4BE01DF53E91 /* AppModel.swift */,
+				2056003331522A33E1E12C59 /* DestinationDraft.swift */,
+				03B0C09DE9A0A9307C40D20F /* DestinationViews.swift */,
+				6FE01CA565762C987E2507AB /* Info.plist */,
+				05EC9CB19C044A766C2BB05D /* PrivacyInfo.xcprivacy */,
+				9BF09398802A6C35F1273F71 /* QueueViews.swift */,
+				BBDEFC677E1D16BA28DF43A4 /* SettingsView.swift */,
+				E1190E1A35C0F51441B19F27 /* TaplineApp.swift */,
+			);
+			name = TaplineiOS;
+			path = Apps/TaplineiOS;
+			sourceTree = "<group>";
+		};
+		43403250A1F69CC760EEE0A8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BD1278836F5F25F643907EF9 /* TaplineiOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7CB7F9E1F6A973798E0716CE = {
+			isa = PBXGroup;
+			children = (
+				DB164C4B53C869A4D027BC0F /* Packages */,
+				1E9FC0B398926E62204E9178 /* TaplineiOS */,
+				43403250A1F69CC760EEE0A8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DB164C4B53C869A4D027BC0F /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				C34D7418E2EE51B437C38B9A /* tapline */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4221489D75FD10AC6D8508BC /* TaplineiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF94D8BEED04346FC3957758 /* Build configuration list for PBXNativeTarget "TaplineiOS" */;
+			buildPhases = (
+				9DD5D0A4ACDB508CFAA0B342 /* Sources */,
+				BA6803CF41944A4B837C4327 /* Resources */,
+				8C15C99DB9A8D6E8544D8AD1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TaplineiOS;
+			packageProductDependencies = (
+				C1129C4709AA1B0B6AA4343E /* CaptureCore */,
+				0486A80CCD98AAF6393CC596 /* CaptureStore */,
+				DB22952387B8BD396B7AE759 /* DeliveryKit */,
+				2862686033D9FCBFC80B777B /* EndpointSecurity */,
+			);
+			productName = TaplineiOS;
+			productReference = BD1278836F5F25F643907EF9 /* TaplineiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		76D86DE73645875D53039206 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					4221489D75FD10AC6D8508BC = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 0B052378F605E9BB5563E68E /* Build configuration list for PBXProject "Tapline" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 7CB7F9E1F6A973798E0716CE;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B5F6AA4C399F597C9A22C47D /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 43403250A1F69CC760EEE0A8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4221489D75FD10AC6D8508BC /* TaplineiOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BA6803CF41944A4B837C4327 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E78C940D6B1FD1ED9E4FAB62 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9DD5D0A4ACDB508CFAA0B342 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F87B5A96D36C59D099477923 /* AppModel.swift in Sources */,
+				57DD87B9FB1A59974FD571AB /* DestinationDraft.swift in Sources */,
+				00E53A81BC428C2E2B275287 /* DestinationViews.swift in Sources */,
+				C04BA3E482638F3B32B75681 /* QueueViews.swift in Sources */,
+				907C436D0DA7511F9F7E5E40 /* SettingsView.swift in Sources */,
+				40E033B349E1ED78D786F38E /* TaplineApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1116D11E42694EB2129DC5E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Apps/TaplineiOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.ios;
+				PRODUCT_NAME = Tapline;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		31587B907CF5D142C306BBD9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		7B080B0E3328B4C0A889ADD8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		A1AA876A8DBFB00008A4125C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Apps/TaplineiOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapline.ios;
+				PRODUCT_NAME = Tapline;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0B052378F605E9BB5563E68E /* Build configuration list for PBXProject "Tapline" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B080B0E3328B4C0A889ADD8 /* Debug */,
+				31587B907CF5D142C306BBD9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BF94D8BEED04346FC3957758 /* Build configuration list for PBXNativeTarget "TaplineiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1116D11E42694EB2129DC5E0 /* Debug */,
+				A1AA876A8DBFB00008A4125C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		B5F6AA4C399F597C9A22C47D /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0486A80CCD98AAF6393CC596 /* CaptureStore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CaptureStore;
+		};
+		2862686033D9FCBFC80B777B /* EndpointSecurity */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EndpointSecurity;
+		};
+		C1129C4709AA1B0B6AA4343E /* CaptureCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CaptureCore;
+		};
+		DB22952387B8BD396B7AE759 /* DeliveryKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DeliveryKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 76D86DE73645875D53039206 /* Project object */;
+}
