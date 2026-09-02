@@ -11,6 +11,7 @@
 		1CEE926CE751C163102C83E4 /* DeliveryKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB22952387B8BD396B7AE759 /* DeliveryKit */; };
 		277B5E08D0F9AA5147BADB1F /* TaplineWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBBF4891293B17FBB5F4F15 /* TaplineWatchApp.swift */; };
 		34113A4DE9E4987920A12D99 /* CaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA56737FA573F6268DE87DF /* CaptureView.swift */; };
+		3EA1A6F2E8D4BFEE7A06476D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E56D8220D77357F9B45E7382 /* Assets.xcassets */; };
 		40E033B349E1ED78D786F38E /* TaplineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1190E1A35C0F51441B19F27 /* TaplineApp.swift */; };
 		442D3CA74F790BEC2142A188 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FEDEE56F375233D7755A667A /* PrivacyInfo.xcprivacy */; };
 		57DD87B9FB1A59974FD571AB /* DestinationDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2056003331522A33E1E12C59 /* DestinationDraft.swift */; };
@@ -90,6 +91,7 @@
 		BD1278836F5F25F643907EF9 /* TaplineiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TaplineiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D26B69179A610CE3E92F788D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E1190E1A35C0F51441B19F27 /* TaplineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaplineApp.swift; sourceTree = "<group>"; };
+		E56D8220D77357F9B45E7382 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F8F75CCFBB28A84762A8588C /* WatchCaptureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchCaptureModel.swift; sourceTree = "<group>"; };
 		FC7080FBC410B63F44D88A15 /* OpenCaptureIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCaptureIntent.swift; sourceTree = "<group>"; };
 		FEDEE56F375233D7755A667A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 		69BB8A9C0AF9EA318646BB2D /* TaplineWatch */ = {
 			isa = PBXGroup;
 			children = (
+				E56D8220D77357F9B45E7382 /* Assets.xcassets */,
 				1FA56737FA573F6268DE87DF /* CaptureView.swift */,
 				788070161B931ECF24EF31F6 /* Info.plist */,
 				FEDEE56F375233D7755A667A /* PrivacyInfo.xcprivacy */,
@@ -314,6 +317,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EA1A6F2E8D4BFEE7A06476D /* Assets.xcassets in Resources */,
 				442D3CA74F790BEC2142A188 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
