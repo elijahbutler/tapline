@@ -390,7 +390,16 @@ final class WatchCaptureModel: NSObject, ObservableObject {
     ]
 
     private static func inspectAudio(at url: URL, fallbackDuration: TimeInterval) throws -> AudioInspection {
-        let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+        let attributes: [FileAttributeKey: Any]
+        do {
+            attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+        } catch {
+            let error = error as NSError
+            if error.domain == NSCocoaErrorDomain, error.code == NSFileNoSuchFileError {
+                throw AudioInspectionError.invalidRecording
+            }
+            throw error
+        }
         guard (attributes[.size] as? NSNumber)?.int64Value ?? 0 > 0 else {
             throw AudioInspectionError.invalidRecording
         }
