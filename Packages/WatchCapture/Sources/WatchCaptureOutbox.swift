@@ -326,6 +326,9 @@ public actor WatchCaptureOutbox {
     private func recoverCommittedDirectory(_ directory: URL, removingDraft: Bool) {
         do {
             let event = try EventCodec.decode(Data(contentsOf: directory.appending(path: eventFilename)))
+            guard directory.lastPathComponent == event.id.uuidString.lowercased() else {
+                throw WatchCaptureOutboxError.captureNotActive(event.id)
+            }
             let draftURL = directory.appending(path: draftFilename)
             if removingDraft, fileManager.fileExists(atPath: draftURL.path) {
                 try fileManager.removeItem(at: draftURL)

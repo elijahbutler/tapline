@@ -180,6 +180,31 @@ final class WatchCaptureOutboxTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: staging.path))
     }
 
+    func testStagedEventWithMismatchedDirectoryIDIsQuarantined() async throws {
+        let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        _ = try await outbox.snapshot()
+        let directoryID = UUID()
+        let event = CaptureEvent(
+            id: UUID(),
+            type: .buttonPressed,
+            occurredAt: .now,
+            capturedAt: .now,
+            source: source
+        )
+        let staging = temporaryDirectory.appending(
+            path: "staging/\(directoryID.uuidString.lowercased())",
+            directoryHint: .isDirectory
+        )
+        try FileManager.default.createDirectory(at: staging, withIntermediateDirectories: true)
+        try EventCodec.encode(event).write(to: staging.appending(path: "event.json"), options: .atomic)
+
+        let snapshot = try await outbox.snapshot()
+
+        XCTAssertTrue(snapshot.items.isEmpty)
+        XCTAssertEqual(snapshot.failures.first { $0.id == directoryID }?.code, .outboxRecoveryFailed)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: staging.path))
+    }
+
     func testCorruptPendingCaptureIsQuarantinedWithoutBlockingValidEvents() async throws {
         let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
         let valid = try await outbox.commitButtonEvent(source: source)
