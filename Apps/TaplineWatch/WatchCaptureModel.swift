@@ -210,6 +210,7 @@ final class WatchCaptureModel: NSObject, ObservableObject {
     private func finishRecording(interrupted: Bool, reason: String?) async {
         guard !isFinalizing, let recorder, let capture = activeCapture, let outbox else { return }
         isFinalizing = true
+        defer { isFinalizing = false }
         elapsedTask?.cancel()
         elapsedTask = nil
 
@@ -221,25 +222,9 @@ final class WatchCaptureModel: NSObject, ObservableObject {
         state = .saving
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
 
+        let inspection: AudioInspection
         do {
-            let inspection = try Self.inspectAudio(at: capture.fileURL, fallbackDuration: recorderDuration)
-            _ = try await outbox.commitAudioCapture(
-                capture,
-                source: eventSource,
-                durationMilliseconds: inspection.durationMilliseconds,
-                sampleRateHertz: inspection.sampleRateHertz,
-                channelCount: inspection.channelCount,
-                interrupted: interrupted,
-                interruptionReason: reason
-            )
-            activeCapture = nil
-            elapsed = 0
-            _ = try? await refreshSnapshot(using: outbox)
-            if interrupted {
-                state = .interrupted("Audio changed. The finished part was saved.")
-            } else {
-                state = .saved("Recording saved on this watch")
-            }
+            inspection = try Self.inspectAudio(at: capture.fileURL, fallbackDuration: recorderDuration)
         } catch {
             _ = try? await outbox.recordFailure(
                 id: capture.id,
@@ -257,13 +242,53 @@ final class WatchCaptureModel: NSObject, ObservableObject {
                     ? "Audio changed before a playable clip could be saved."
                     : "The recording could not be saved as playable audio."
             )
+            return
         }
-        isFinalizing = false
+
+        do {
+            _ = try await outbox.commitAudioCapture(
+                capture,
+                source: eventSource,
+                durationMilliseconds: inspection.durationMilliseconds,
+                sampleRateHertz: inspection.sampleRateHertz,
+                channelCount: inspection.channelCount,
+                interrupted: interrupted,
+                interruptionReason: reason
+            )
+        } catch {
+            activeCapture = nil
+            elapsed = 0
+            _ = try? await refreshSnapshot(using: outbox)
+            state = .failed("Recording is saved locally and will retry when Tapline opens again.")
+            return
+        }
+
+        activeCapture = nil
+        elapsed = 0
+        _ = try? await refreshSnapshot(using: outbox)
+        if interrupted {
+            state = .interrupted("Audio changed. The finished part was saved.")
+        } else {
+            state = .saved("Recording saved on this watch")
+        }
     }
 
     private func recover(_ capture: ActiveAudioCapture, using outbox: WatchCaptureOutbox) async {
+        let inspection: AudioInspection
         do {
-            let inspection = try Self.inspectAudio(at: capture.fileURL, fallbackDuration: 0)
+            inspection = try Self.inspectAudio(at: capture.fileURL, fallbackDuration: 0)
+        } catch {
+            _ = try? await outbox.recordFailure(
+                id: capture.id,
+                occurredAt: capture.occurredAt,
+                code: .recordingInterrupted,
+                message: "Tapline closed before the recording became playable."
+            )
+            state = .failed("A previous recording ended before it became playable.")
+            return
+        }
+
+        do {
             _ = try await outbox.commitAudioCapture(
                 capture,
                 source: eventSource,
@@ -275,13 +300,7 @@ final class WatchCaptureModel: NSObject, ObservableObject {
             )
             state = .interrupted("An interrupted recording was recovered.")
         } catch {
-            _ = try? await outbox.recordFailure(
-                id: capture.id,
-                occurredAt: capture.occurredAt,
-                code: .recordingInterrupted,
-                message: "Tapline closed before the recording became playable."
-            )
-            state = .failed("A previous recording ended before it became playable.")
+            state = .failed("A previous recording is saved locally and will retry.")
         }
     }
 
