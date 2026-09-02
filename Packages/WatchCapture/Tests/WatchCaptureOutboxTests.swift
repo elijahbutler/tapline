@@ -180,6 +180,34 @@ final class WatchCaptureOutboxTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: staging.path))
     }
 
+    func testButtonEventSurvivesTransientPromotionFailure() async throws {
+        let eventID = UUID()
+        let failingFileManager = FailOnceStagingMoveFileManager()
+        let outbox = WatchCaptureOutbox(
+            rootDirectory: temporaryDirectory,
+            fileManager: failingFileManager
+        )
+
+        do {
+            _ = try await outbox.commitButtonEvent(id: eventID, source: source)
+            XCTFail("Expected the first promotion to fail")
+        } catch {
+            XCTAssertEqual((error as NSError).domain, FailOnceStagingMoveFileManager.errorDomain)
+        }
+
+        let staging = temporaryDirectory.appending(
+            path: "staging/\(eventID.uuidString.lowercased())",
+            directoryHint: .isDirectory
+        )
+        XCTAssertTrue(FileManager.default.fileExists(atPath: staging.appending(path: "event.json").path))
+
+        let relaunched = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
+        let snapshot = try await relaunched.snapshot()
+
+        XCTAssertEqual(snapshot.items.map(\.id), [eventID])
+        XCTAssertFalse(FileManager.default.fileExists(atPath: staging.path))
+    }
+
     func testStagedEventWithMismatchedDirectoryIDIsQuarantined() async throws {
         let outbox = WatchCaptureOutbox(rootDirectory: temporaryDirectory)
         _ = try await outbox.snapshot()
@@ -263,5 +291,20 @@ final class WatchCaptureOutboxTests: XCTestCase {
 
     private func canonicalURL(_ url: URL) -> URL {
         url.standardizedFileURL.resolvingSymlinksInPath()
+    }
+}
+
+private final class FailOnceStagingMoveFileManager: FileManager, @unchecked Sendable {
+    static let errorDomain = "WatchCaptureOutboxTests.TransientMove"
+
+    private var shouldFailStagingMove = true
+
+    override func moveItem(at sourceURL: URL, to destinationURL: URL) throws {
+        if shouldFailStagingMove,
+           sourceURL.deletingLastPathComponent().lastPathComponent == "staging" {
+            shouldFailStagingMove = false
+            throw NSError(domain: Self.errorDomain, code: 1)
+        }
+        try super.moveItem(at: sourceURL, to: destinationURL)
     }
 }

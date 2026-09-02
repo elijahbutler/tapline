@@ -170,7 +170,10 @@ public actor WatchCaptureOutbox {
             try moveCommittedDirectory(staging, eventID: event.id)
             return event
         } catch {
-            try? fileManager.removeItem(at: staging)
+            let eventURL = staging.appending(path: eventFilename)
+            if !fileManager.fileExists(atPath: eventURL.path) {
+                try? fileManager.removeItem(at: staging)
+            }
             throw error
         }
     }
